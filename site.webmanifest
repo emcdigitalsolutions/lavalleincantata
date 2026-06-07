@@ -1,0 +1,16 @@
+{
+  "name": "La Valle Incantata · Casa Vacanze",
+  "short_name": "La Valle Incantata",
+  "description": "Casa vacanze nuova nel cuore del Parco della Divina Commedia, Campobello di Licata (AG).",
+  "lang": "it",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#2f5d50",
+  "theme_color": "#2f5d50",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

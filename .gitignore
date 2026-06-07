@@ -1,0 +1,19 @@
+# Lavorazione / temp
+_tmp-*
+_s-*.png
+_logocheck.png
+_contactsheet.jpg
+_batch*.jpg
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Foto originali ad alta risoluzione — sul sito si usano solo le ottimizzate (images/web/)
+images/foto-*.jpg
+
+# Sorgenti logo (interne, non parte del sito pubblico)
+logo/
+
+# Dominio: NON deployare il CNAME finché lavalleincantata.it non è registrato + DNS configurato.
+# Quando pronto: togliere questa riga e fare commit del file CNAME.
+CNAME
