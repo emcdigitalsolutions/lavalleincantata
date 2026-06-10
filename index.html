@@ -220,6 +220,8 @@ header.scrolled .burger span{background:var(--green-900)}
 .dint-card .dist{display:inline-block;background:var(--terra);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:4px 11px;border-radius:999px;margin-bottom:10px}
 .dint-card h3{color:#fff;font-size:22px;margin-bottom:5px}
 .dint-card p{color:rgba(255,255,255,.85);font-size:13.5px}
+.dint-more{display:inline-block;margin-top:10px;color:var(--gold);font-weight:600;font-size:13px;letter-spacing:.02em}
+a.dint-card:hover .dint-more{text-decoration:underline}
 .dint-feat{grid-column:span 2}
 
 /* ============ ESPERIENZE / RECENSIONI ============ */
@@ -495,7 +497,7 @@ footer{background:#1b352d;color:rgba(255,255,255,.6);padding:64px 0 28px;font-si
       <p data-i18n="dint_p">La casa è la base ideale per scoprire arte, natura e mare dell'agrigentino.</p>
     </div>
     <div class="dint-grid">
-      <div class="dint-card dint-feat reveal"><img src="images/web/foto-29.jpg" alt="Parco della Divina Commedia"><div class="c"><span class="dist" data-i18n="d1_dist">In loco</span><h3 data-i18n="d1_t">Parco della Divina Commedia</h3><p data-i18n="d1_p">La Valle delle Pietre Dipinte: enormi massi affrescati che raccontano la Divina Commedia. La casa è proprio qui.</p></div></div>
+      <a href="parco-divina-commedia.html" class="dint-card dint-feat reveal" style="text-decoration:none"><img src="images/web/foto-29.jpg" alt="Parco della Divina Commedia"><div class="c"><span class="dist" data-i18n="d1_dist">In loco</span><h3 data-i18n="d1_t">Parco della Divina Commedia</h3><p data-i18n="d1_p">La Valle delle Pietre Dipinte: enormi massi affrescati che raccontano la Divina Commedia. La casa è proprio qui.</p><span class="dint-more" data-i18n="d1_more">Scopri il parco →</span></div></a>
       <div class="dint-card reveal"><img src="images/web/foto-21.jpg" alt="Valle dei Templi"><div class="c"><span class="dist" data-i18n="d2_dist">~40 min</span><h3 data-i18n="d2_t">Valle dei Templi</h3><p data-i18n="d2_p">Uno dei siti archeologici greci più spettacolari al mondo, ad Agrigento.</p></div></div>
       <div class="dint-card reveal"><img src="images/web/foto-04.jpg" alt="Scala dei Turchi"><div class="c"><span class="dist" data-i18n="d3_dist">~50 min</span><h3 data-i18n="d3_t">Scala dei Turchi</h3><p data-i18n="d3_p">La celebre falesia bianca a picco sul mare turchese.</p></div></div>
       <div class="dint-card reveal"><img src="images/web/foto-23.jpg" alt="Castello di Chiaramonte"><div class="c"><span class="dist" data-i18n="d4_dist">~35 min</span><h3 data-i18n="d4_t">Castello Chiaramonte</h3><p data-i18n="d4_p">Storia e panorami tra i borghi e i castelli dell'entroterra.</p></div></div>
@@ -709,7 +711,7 @@ const I18N = {
     gf1:"🌿 Exotic plants",gf2:"🔥 Barbecue area",gf3:"⛱ Gazebo 10×3.8 m",gf4:"🪑 Lounge & dining",
     gal_eye:"Gallery",gal_h2:"Take a look at the house",
     dint_eye:"What to see",dint_h2:"The wonders of Sicily, within reach",dint_p:"The house is the ideal base to discover art, nature and the sea of the Agrigento area.",
-    d1_dist:"On site",d1_t:"Divine Comedy Park",d1_p:"The Valley of the Painted Stones: huge frescoed boulders telling the Divine Comedy. The house is right here.",
+    d1_dist:"On site",d1_t:"Divine Comedy Park",d1_p:"The Valley of the Painted Stones: huge frescoed boulders telling the Divine Comedy. The house is right here.",d1_more:"Discover the park →",
     d2_dist:"~40 min",d2_t:"Valley of the Temples",d2_p:"One of the most spectacular Greek archaeological sites in the world, in Agrigento.",
     d3_dist:"~50 min",d3_t:"Scala dei Turchi",d3_p:"The famous white cliff overlooking the turquoise sea.",
     d4_dist:"~35 min",d4_t:"Chiaramonte Castle",d4_p:"History and views among the villages and castles of the inland.",
