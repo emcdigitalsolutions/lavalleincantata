@@ -280,8 +280,11 @@ a.dint-card:hover .dint-more{text-decoration:underline}
 .field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;background:var(--cream);transition:.2s}
 .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--green-500);background:#fff}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-note{margin-top:12px;font-size:14px;font-weight:600;display:none}
-.form-note.ok{display:block;color:var(--green-700)}.form-note.err{display:block;color:#c0392b}
+.form-note{margin-top:12px;font-size:14px;font-weight:600;display:none;padding:12px 14px;border-radius:12px}
+.form-note.ok{display:block;color:#1e4034;background:#e8f1e6;border:1px solid #bcd6bd}.form-note.err{display:block;color:#8d2b22;background:#fbe9e7;border:1px solid #e6b8b1}
+#toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-24px);max-width:92%;padding:15px 22px;border-radius:14px;font-size:15px;font-weight:600;color:#fff;text-align:center;box-shadow:0 14px 38px rgba(0,0,0,.28);z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.ok{background:#2f5d50}#toast.err{background:#c0392b}
 .privacy-note{font-size:12px;color:var(--muted);margin-top:14px}
 .privacy-note a{color:var(--green-700);text-decoration:underline}
 
@@ -819,19 +822,22 @@ document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return
 const CONTACT_API='https://script.google.com/macros/s/AKfycbxLCgN0-mHN86Dk37a5m-p2A3DgMjc8b__aCO_9oBA_amLUn5MlipebKalo5qNIoSWl/exec';
 const form=document.getElementById('contactForm'),note=document.getElementById('formNote');
 const T={it:{ok:"Grazie! Abbiamo ricevuto la tua richiesta, ti ricontattiamo al più presto.",err:"Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.",req:"Compila i campi obbligatori.",sending:"Invio in corso..."},en:{ok:"Thank you! We received your request, we'll get back to you soon.",err:"Oops, something went wrong. Try again or message us on WhatsApp.",req:"Please fill in the required fields.",sending:"Sending..."}};
+function showToast(msg,type){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className=type;requestAnimationFrame(()=>t.classList.add('show'));clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),6000);}
+function showNote(type,msg){note.className='form-note '+type;note.textContent=msg;showToast(msg,type);try{note.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
 form.addEventListener('submit',e=>{
   e.preventDefault();
   const lang=document.documentElement.lang==='en'?'en':'it';
   if(form.querySelector('[name="_honey"]').value)return;
   const nome=document.getElementById('f_nome').value,email=document.getElementById('f_email').value;
-  if(!nome||!email){note.className='form-note err';note.textContent=T[lang].req;return;}
+  if(!nome||!email){showNote('err',T[lang].req);return;}
   const btn=form.querySelector('button[type=submit]');const lbl=btn.textContent;btn.disabled=true;btn.textContent=T[lang].sending;note.className='form-note';note.textContent='';
   const msg=`Check-in: ${document.getElementById('f_in').value||'-'} · Check-out: ${document.getElementById('f_out').value||'-'} · Ospiti: ${document.getElementById('f_guests').value}\n\n${document.getElementById('f_msg').value}`;
   fetch(CONTACT_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:'lavalleincantata',name:nome,email:email,phone:document.getElementById('f_tel').value,message:msg})})
-  .then(()=>{note.className='form-note ok';note.textContent=T[lang].ok;form.reset();})
-  .catch(()=>{note.className='form-note err';note.textContent=T[lang].err;})
+  .then(()=>{showNote('ok',T[lang].ok);form.reset();})
+  .catch(()=>{showNote('err',T[lang].err);})
   .finally(()=>{btn.disabled=false;btn.textContent=lbl;});
 });
 </script>
+<div id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
