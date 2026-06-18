@@ -616,7 +616,7 @@ footer{background:#1b352d;color:rgba(255,255,255,.6);padding:64px 0 28px;font-si
         <div class="field"><label data-i18n="f_name">Nome e cognome</label><input type="text" id="f_nome" required></div>
         <div class="field-row">
           <div class="field"><label data-i18n="f_email">Email</label><input type="email" id="f_email" required></div>
-          <div class="field"><label data-i18n="f_tel">Telefono</label><input type="tel" id="f_tel"></div>
+          <div class="field"><label data-i18n="f_tel">Telefono</label><input type="tel" id="f_tel" inputmode="numeric" autocomplete="tel" pattern="[0-9+ ]*" maxlength="20" oninput="this.value=this.value.replace(/[^0-9+ ]/g,'')"></div>
         </div>
         <div class="field-row">
           <div class="field"><label data-i18n="f_in">Check-in</label><input type="date" id="f_in"></div>
