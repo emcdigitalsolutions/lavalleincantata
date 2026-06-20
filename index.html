@@ -817,27 +817,40 @@ document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return
   document.getElementById('ckNo').addEventListener('click',()=>choose('necessary'));
   document.querySelectorAll('[data-load-maps]').forEach(b=>b.addEventListener('click',()=>choose('all')));
 })();
-
-/* ===== contact form ===== */
-const CONTACT_API='https://script.google.com/macros/s/AKfycbxLCgN0-mHN86Dk37a5m-p2A3DgMjc8b__aCO_9oBA_amLUn5MlipebKalo5qNIoSWl/exec';
-const form=document.getElementById('contactForm'),note=document.getElementById('formNote');
-const T={it:{ok:"Grazie! Abbiamo ricevuto la tua richiesta, ti ricontattiamo al più presto.",err:"Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.",req:"Compila i campi obbligatori.",sending:"Invio in corso..."},en:{ok:"Thank you! We received your request, we'll get back to you soon.",err:"Oops, something went wrong. Try again or message us on WhatsApp.",req:"Please fill in the required fields.",sending:"Sending..."}};
-function showToast(msg,type){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className=type;requestAnimationFrame(()=>t.classList.add('show'));clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),6000);}
-function showNote(type,msg){note.className='form-note '+type;note.textContent=msg;showToast(msg,type);try{note.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
-form.addEventListener('submit',e=>{
-  e.preventDefault();
-  const lang=document.documentElement.lang==='en'?'en':'it';
-  if(form.querySelector('[name="_honey"]').value)return;
-  const nome=document.getElementById('f_nome').value,email=document.getElementById('f_email').value;
-  if(!nome||!email){showNote('err',T[lang].req);return;}
-  const btn=form.querySelector('button[type=submit]');const lbl=btn.textContent;btn.disabled=true;btn.textContent=T[lang].sending;note.className='form-note';note.textContent='';
-  const msg=`Check-in: ${document.getElementById('f_in').value||'-'} · Check-out: ${document.getElementById('f_out').value||'-'} · Ospiti: ${document.getElementById('f_guests').value}\n\n${document.getElementById('f_msg').value}`;
-  fetch(CONTACT_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:'lavalleincantata',name:nome,email:email,phone:document.getElementById('f_tel').value,message:msg})})
-  .then(()=>{showNote('ok',T[lang].ok);form.reset();})
-  .catch(()=>{showNote('err',T[lang].err);})
-  .finally(()=>{btn.disabled=false;btn.textContent=lbl;});
-});
 </script>
 <div id="toast" role="status" aria-live="polite"></div>
+<!-- Contact form: script ISOLATO e indipendente, così nessun errore di altri
+     componenti puo' impedirne l'aggancio. Niente const/template-literal per
+     massima compatibilita' con browser/webview datati. -->
+<script>
+(function(){
+  function init(){
+    var form=document.getElementById('contactForm');
+    if(!form) return;
+    var note=document.getElementById('formNote');
+    var API='https://script.google.com/macros/s/AKfycbxLCgN0-mHN86Dk37a5m-p2A3DgMjc8b__aCO_9oBA_amLUn5MlipebKalo5qNIoSWl/exec';
+    var T={it:{ok:"Grazie! Abbiamo ricevuto la tua richiesta, ti ricontattiamo al più presto.",err:"Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.",req:"Compila i campi obbligatori.",sending:"Invio in corso..."},en:{ok:"Thank you! We received your request, we'll get back to you soon.",err:"Oops, something went wrong. Try again or message us on WhatsApp.",req:"Please fill in the required fields.",sending:"Sending..."}};
+    function val(id){var el=document.getElementById(id);return el?el.value:'';}
+    function showToast(msg,type){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className=type;setTimeout(function(){t.classList.add('show');},10);clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},6000);}
+    function showNote(type,msg){if(note){note.className='form-note '+type;note.textContent=msg;}showToast(msg,type);try{if(note)note.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var lang=document.documentElement.lang==='en'?'en':'it';
+      var honey=form.querySelector('[name="_honey"]');
+      if(honey&&honey.value) return;
+      var nome=val('f_nome'), email=val('f_email');
+      if(!nome||!email){showNote('err',T[lang].req);return;}
+      var btn=form.querySelector('button[type=submit]');var lbl=btn?btn.textContent:'';
+      if(btn){btn.disabled=true;btn.textContent=T[lang].sending;}
+      var msg='Check-in: '+(val('f_in')||'-')+' · Check-out: '+(val('f_out')||'-')+' · Ospiti: '+val('f_guests')+'\n\n'+val('f_msg');
+      fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({site:'lavalleincantata',name:nome,email:email,phone:val('f_tel'),message:msg})})
+      .then(function(){showNote('ok',T[lang].ok);form.reset();})
+      .catch(function(){showNote('err',T[lang].err);})
+      .finally(function(){if(btn){btn.disabled=false;btn.textContent=lbl;}});
+    });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
+</script>
 </body>
 </html>
