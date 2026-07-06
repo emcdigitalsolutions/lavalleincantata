@@ -32,4 +32,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://emcdigitalsolutions.github.io/lavalleincantata/sitemap.xml
+Sitemap: https://lavalleincantatacasavacanze.it/sitemap.xml
