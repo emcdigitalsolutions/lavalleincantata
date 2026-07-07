@@ -83,7 +83,13 @@ footer{background:#1b352d;color:rgba(255,255,255,.55);padding:22px 0;margin-top:
   <p data-i18n="t8b">Il Titolare può aggiornare la presente informativa; le modifiche saranno pubblicate su questa pagina.</p>
 </main>
 
-<footer><div class="wrap">© <span id="year"></span> La Valle Incantata · Campobello di Licata (AG)</div></footer>
+<footer><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+  <div>© <span id="year"></span> La Valle Incantata · Campobello di Licata (AG)</div>
+  <a href="https://www.emcdigitalsolutions.it" target="_blank" rel="noopener" title="Progettato e Sviluppato da EMC Digital Solutions" style="display:inline-flex;align-items:center;gap:10px;color:rgba(255,255,255,.72);text-decoration:none;font-size:13px">
+    <span data-i18n="foot_by">Progettato e Sviluppato da</span>
+    <svg width="104" height="26" viewBox="0 0 200 50"><defs><linearGradient id="emcB" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9bb29e"/><stop offset="100%" stop-color="#e0a05a"/></linearGradient><linearGradient id="emcT" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#cdd9cd"/><stop offset="50%" stop-color="#9bb29e"/><stop offset="100%" stop-color="#e0a05a"/></linearGradient></defs><rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcB)"/><rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcB)"/><rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcB)"/><text x="48" y="34" font-family="Arial,sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcT)">EMC</text></svg>
+  </a>
+</div></footer>
 
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -100,7 +106,8 @@ const EN={
   t6:"6. Your rights",t6b:"You may exercise at any time the rights of access, rectification, erasure, restriction, objection and portability (art. 15-22 GDPR) by writing to the controller, and lodge a complaint with the <a href='https://www.garanteprivacy.it' target='_blank' rel='noopener'>Italian DPA</a>.",
   t7:"7. Cookies",t7b:"<strong>Technical/necessary cookies:</strong> the site stores in the browser (localStorage) the language preference and the cookie choice. They do not track the user.",
   t7c:"<strong>Third-party cookies (maps):</strong> the <strong>Google Maps</strong> map loads only after your consent; until then no Google cookie is installed. You can manage or revoke choices by clearing the site data in your browser. The site uses no analytics or marketing cookies.",
-  t8:"8. Changes",t8b:"The controller may update this policy; changes will be published on this page."
+  t8:"8. Changes",t8b:"The controller may update this policy; changes will be published on this page.",
+  foot_by:"Designed & Developed by"
 };
 const IT={};document.querySelectorAll('[data-i18n]').forEach(el=>IT[el.getAttribute('data-i18n')]=el.innerHTML);
 function setLang(l){document.documentElement.lang=l;document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');el.innerHTML=(l==='en'?EN[k]:IT[k])??el.innerHTML;});document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));try{localStorage.setItem('lvi-lang',l);}catch(e){}}
