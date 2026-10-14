@@ -652,9 +652,9 @@ footer{background:#1b352d;color:rgba(255,255,255,.6);padding:64px 0 28px;font-si
         </div>
         <div class="field"><label data-i18n="f_guests">Ospiti</label><select id="f_guests"><option value="1-2">1-2</option><option value="3-4">3-4</option><option value="5-6">5-6</option><option value="7-8">7-8</option></select></div>
         <div class="field"><label data-i18n="f_msg">Messaggio</label><textarea id="f_msg" rows="3" data-i18n-ph="f_msg_ph" placeholder="Raccontaci di cosa hai bisogno..."></textarea></div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" data-i18n="f_send">Invia richiesta</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" data-i18n="f_send">Scrivi con la tua email</button>
         <div class="form-note" id="formNote"></div>
-        <p class="privacy-note" data-i18n="f_privacy">Inviando accetti il trattamento dei dati secondo l'<a href="privacy.html">informativa privacy</a>.</p>
+        <p class="privacy-note" data-i18n="f_privacy">Si aprirà il tuo programma di posta con la richiesta già pronta: la invii tu. Il sito non invia né conserva i tuoi dati (<a href="privacy.html">informativa privacy</a>).</p>
       </form>
     </div>
   </div>
@@ -780,8 +780,8 @@ const I18N = {
     con_eye:"Book",con_h2:"Request your availability",con_p:"Write to us for dates, prices and info: we reply quickly, also on WhatsApp.",
     ci_phone:"Phone / WhatsApp",ci_email:"Email",ci_addr:"Where we are",ci_addr_v:"Via Caduti in Tempo di Pace<br>Campobello di Licata (AG)",ci_wa:"Message us on WhatsApp",
     form_h:"Availability request",form_sub:"Fill in the form: we'll get back to you as soon as possible.",
-    f_name:"Full name",f_email:"Email",f_tel:"Phone",f_in:"Check-in",f_out:"Check-out",f_guests:"Guests",f_msg:"Message",f_msg_ph:"Tell us what you need...",f_send:"Send request",
-    f_privacy:"By sending you accept the data processing per the <a href='privacy.html'>privacy policy</a>.",
+    f_name:"Full name",f_email:"Email",f_tel:"Phone",f_in:"Check-in",f_out:"Check-out",f_guests:"Guests",f_msg:"Message",f_msg_ph:"Tell us what you need...",f_send:"Write with your email",
+    f_privacy:"Your email app will open with the request ready: you send it. The site does not send or store your data (<a href='privacy.html'>privacy policy</a>).",
     foot_blurb:"Brand-new holiday home in the heart of the Divine Comedy Park. Your elegant retreat to discover authentic Sicily.",
     foot_nav:"Explore",foot_contacts:"Contact",foot_follow:"Follow us",foot_follow_p:"News, offers and corners of Sicily.",
     foot_rights:"All rights reserved",foot_privacy:"Privacy & Cookie",foot_by:"Designed & developed by",
@@ -856,8 +856,9 @@ document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return
     var form=document.getElementById('contactForm');
     if(!form) return;
     var note=document.getElementById('formNote');
-    var API='https://script.google.com/macros/s/AKfycbxLCgN0-mHN86Dk37a5m-p2A3DgMjc8b__aCO_9oBA_amLUn5MlipebKalo5qNIoSWl/exec';
-    var T={it:{ok:"Grazie! Abbiamo ricevuto la tua richiesta, ti ricontattiamo al più presto.",err:"Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.",req:"Compila i campi obbligatori.",sending:"Invio in corso..."},en:{ok:"Thank you! We received your request, we'll get back to you soon.",err:"Oops, something went wrong. Try again or message us on WhatsApp.",req:"Please fill in the required fields.",sending:"Sending..."}};
+    // Nessun server intermedio: il modulo apre il programma di posta dell'utente con la richiesta pronta.
+    var TO='prenotazioni@lavalleincantatacasavacanze.it';
+    var T={it:{ok:"Si è aperto il tuo programma di posta con la richiesta pronta: controllala e premi Invia. Se non si apre nulla, scrivici a "+TO+" o su WhatsApp.",err:"Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.",req:"Compila i campi obbligatori.",sending:"Invio in corso..."},en:{ok:"Your email app has opened with the request ready: check it and press Send. If nothing opens, write to "+TO+" or message us on WhatsApp.",err:"Oops, something went wrong. Try again or message us on WhatsApp.",req:"Please fill in the required fields.",sending:"Sending..."}};
     function val(id){var el=document.getElementById(id);return el?el.value:'';}
     function showToast(msg,type){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className=type;setTimeout(function(){t.classList.add('show');},10);clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},6000);}
     function showNote(type,msg){if(note){note.className='form-note '+type;note.textContent=msg;}showToast(msg,type);try{if(note)note.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
@@ -868,13 +869,10 @@ document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return
       if(honey&&honey.value) return;
       var nome=val('f_nome'), email=val('f_email');
       if(!nome||!email){showNote('err',T[lang].req);return;}
-      var btn=form.querySelector('button[type=submit]');var lbl=btn?btn.textContent:'';
-      if(btn){btn.disabled=true;btn.textContent=T[lang].sending;}
       var msg='Check-in: '+(val('f_in')||'-')+' · Check-out: '+(val('f_out')||'-')+' · Ospiti: '+val('f_guests')+'\n\n'+val('f_msg');
-      fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({site:'lavalleincantata',name:nome,email:email,phone:val('f_tel'),message:msg})})
-      .then(function(){showNote('ok',T[lang].ok);form.reset();})
-      .catch(function(){showNote('err',T[lang].err);})
-      .finally(function(){if(btn){btn.disabled=false;btn.textContent=lbl;}});
+      var corpo=msg+'\n\n— '+nome+'\nEmail: '+email+(val('f_tel')?'\nTel: '+val('f_tel'):'');
+      window.location.href='mailto:prenotazioni@lavalleincantatacasavacanze.it?subject='+encodeURIComponent((lang==='en'?'Booking request — ':'Richiesta di prenotazione — ')+nome)+'&body='+encodeURIComponent(corpo);
+      showNote('ok',T[lang].ok);
     });
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
